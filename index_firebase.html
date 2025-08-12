@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomos y Chelas - Catálogo de Venta</title>
+  <style>
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0; 
+      padding: 0; 
+      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center fixed; 
+      background-size: cover; 
+    }
+    header { 
+      background: rgba(0, 0, 0, 0.8); 
+      color: white; 
+      padding: 1.5rem; 
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      letter-spacing: 2px;
+    }
+    .container { 
+      padding: 2rem; 
+      background: rgba(255, 255, 255, 0.9); 
+      border-radius: 10px; 
+      max-width: 1200px;
+      margin: 2rem auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    .category { 
+      display: inline-block; 
+      margin: 0.5rem; 
+      cursor: pointer; 
+      padding: 0.8rem 1.5rem; 
+      background: #007bff; 
+      color: white;
+      border-radius: 20px; 
+      transition: all 0.3s;
+      font-weight: bold;
+    }
+    .category:hover { 
+      background: #0056b3; 
+      transform: translateY(-2px);
+    }
+    .categories-container {
+      text-align: center;
+      margin: 1rem 0;
+    }
+    .product { 
+      background: white; 
+      padding: 1.5rem; 
+      margin: 1rem 0; 
+      border-radius: 10px; 
+      display: flex; 
+      align-items: center; 
+      gap: 1rem; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .product:hover {
+      transform: scale(1.02);
+    }
+    .product img { 
+      width: 120px; 
+      height: 120px; 
+      object-fit: cover; 
+      border-radius: 10px; 
+      border: 2px solid #007bff;
+    }
+    .product-info { 
+      flex-grow: 1; 
+    }
+    .product h3, .product p { 
+      margin: 0 0 0.5rem 0; 
+      color: #343a40;
+    }
+    .stock-info {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+    .btn { 
+      padding: 0.6rem 1.2rem; 
+      background: #28a745; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      transition: all 0.3s;
+      font-weight: bold;
+    }
+    .btn:hover { 
+      background: #218838; 
+    }
+    #cart { 
+      background: white; 
+      padding: 1.5rem; 
+      border-radius: 10px; 
+      margin-top: 2rem; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .whatsapp-link { 
+      display: inline-block; 
+      margin-top: 1rem; 
+      background: #25D366; 
+      color: white; 
+      padding: 0.7rem 1.5rem; 
+      border-radius: 5px; 
+      text-decoration: none; 
+      transition: all 0.3s;
+      font-weight: bold;
+    }
+    .whatsapp-link:hover { 
+      background: #1ebc59; 
+    }
+    .remove-btn { 
+      margin-left: 1rem; 
+      background: #dc3545; 
+    }
+    .remove-btn:hover { 
+      background: #c82333; 
+    }
+    .hidden { 
+      display: none; 
+    }
+    .form-container { 
+      margin-top: 2rem; 
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-container input, 
+    .form-container select { 
+      margin: 0.5rem 0; 
+      padding: 0.6rem; 
+      width: 100%; 
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .modal { 
+      display: none; 
+      position: fixed; 
+      z-index: 1; 
+      left: 0; 
+      top: 0; 
+      width: 100%; 
+      height: 100%; 
+      overflow: auto; 
+      background-color: rgba(0,0,0,0.4); 
+    }
+    .modal-content { 
+      background-color: #fefefe; 
+      margin: 15% auto; 
+      padding: 20px; 
+      border: 1px solid #888; 
+      width: 300px; 
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .close { 
+      color: #aaa; 
+      float: right; 
+      font-size: 28px; 
+      font-weight: bold; 
+    }
+    .close:hover, 
+    .close:focus { 
+      color: black; 
+      text-decoration: none; 
+      cursor: pointer; 
+    }
+    #cart-items {
+      list-style: none;
+      padding: 0;
+    }
+    #cart-items li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-management-item {
+      background: white;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .admin-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .price-input, .stock-input {
+      width: 80px;
+      padding: 0.3rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    /* Estilos del menú hamburguesa */
+    .hamburger-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .hamburger-icon {
+      width: 30px;
+      height: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hamburger-icon span {
+      display: block;
+      width: 100%;
+      height: 3px;
+      background: white;
+      transition: all 0.3s;
+    }
+    .menu-options {
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background: rgba(51, 51, 51, 0.9);
+      border-radius: 5px;
+      overflow: hidden;
+      display: none;
+      min-width: 150px;
+    }
+    .menu-options button {
+      display: block;
+      width: 100%;
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      color: white;
+      text-align: left;
+      cursor: pointer;
+    }
+    .menu-options button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pomos y Chelas</h1>
+    <!-- Menú Hamburguesa -->
+    <div class="hamburger-menu" id="hamburgerMenu">
+      <div class="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="menu-options" id="menuOptions">
+        <button id="loginMenuBtn">Iniciar Sesión</button>
+        <button id="logoutMenuBtn" class="hidden">Cerrar Sesión</button>
+        <button id="changePasswordMenuBtn" class="hidden">Cambiar Contraseña</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="admin-container" class="hidden">
+      <div class="form-container">
+        <h2>Panel de Administración</h2>
+        
+        <h3>Añadir Producto</h3>
+        <input type="text" id="product-name" placeholder="Nombre del Producto" required>
+        <input type="number" id="product-price" placeholder="Precio" min="0" step="0.01" required>
+        <input type="number" id="product-stock" placeholder="Existencias" min="0" required>
+        <input type="text" id="product-image" placeholder="URL de la Imagen" required>
+        <select id="product-category">
+          <option value="vino-tinto">Vino Tinto</option>
+          <option value="vino-blanco">Vino Blanco</option>
+          <option value="cerveza">Cerveza</option>
+          <option value="ron">Ron</option>
+          <option value="tequila">Tequila</option>
+          <option value="mezcal">Mezcal</option>
+        </select>
+        <button class="btn" id="add-product-btn">Añadir Producto</button>
+        
+        <h3>Gestionar Productos</h3>
+        <div id="product-management-list"></div>
+      </div>
+    </div>
+
+    <div class="categories-container">
+      <div class="category" data-category="vino-tinto">Vino Tinto</div>
+      <div class="category" data-category="vino-blanco">Vino Blanco</div>
+      <div class="category" data-category="cerveza">Cerveza</div>
+      <div class="category" data-category="ron">Ron</div>
+      <div class="category" data-category="tequila">Tequila</div>
+      <div class="category" data-category="mezcal">Mezcal</div>
+    </div>
+
+    <div id="products">
+      <div id="vino-tinto" class="product-list">
+        <div class="product" data-id="1" data-stock="10">
+          <img src="https://www.vinasa.mx/wp-content/uploads/2021/07/vino-tinto.png" alt="Vino Tinto">
+          <div class="product-info">
+            <h3>Vino Tinto 750ml</h3>
+            <p>$250</p>
+            <div class="stock-info">Disponibles: <span>10</span></div>
+          </div>
+          <button class="btn add-to-cart" data-name="Vino Tinto 750ml" data-price="250">Agregar al carrito</button>
+        </div>
+        <div class="product" data-id="2" data-stock="8">
+          <img src="https://www.vinasa.mx/wp-content/uploads/2021/07/vino-tinto2.png" alt="Vino Tinto 2">
+          <div class="product-info">
+            <h3>Vino Tinto Reserva 750ml</h3>
+            <p>$300</p>
+            <div class="stock-info">Disponibles: <span>8</span></div>
+          </div>
+          <button class="btn add-to-cart" data-name="Vino Tinto Reserva 750ml" data-price="300">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div id="vino-blanco" class="product-list hidden">
+        <div class="product" data-id="3" data-stock="12">
+          <img src="https://www.vinasa.mx/wp-content/uploads/2021/07/vino-blanco.png" alt="Vino Blanco">
+          <div class="product-info">
+            <h3>Vino Blanco 750ml</h3>
+            <p>$220</p>
+            <div class="stock-info">Disponibles: <span>12</span></div>
+          </div>
+          <button class="btn add-to-cart" data-name="Vino Blanco 750ml" data-price="220">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div id="cerveza" class="product-list hidden">
+        <div class="product" data-id="4" data-stock="24">
+          <img src="https://www.vinasa.mx/wp-content/uploads/2021/07/cerveza.png" alt="Cerveza">
+          <div class="product-info">
+            <h3>Cerveza 355ml</h3>
+            <p>$30</p>
+            <div class="stock-info">Disponibles: <span>24</span></div>
+          </div>
+          <button class="btn add-to-cart" data-name="Cerveza 355ml" data-price="30">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div id="ron" class="product-list hidden">
+        <div class="product" data-id="5" data-stock="6">
+          <img src="https://www.vinasa.mx/wp-content/uploads/2021/07/ron.png" alt="Ron">
+          <div class="product-info">
+            <h3>Ron 750ml</h3>
+            <p>$300</p>
+            <div class="stock-info">Disponibles: <span>6</span></div>
+          </div>
+          <button class="btn add-to-cart" data-name="Ron 750ml" data-price="300">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div id="tequila" class="product-list hidden">
+        <div class="product" data-id="6" data-stock="5">
+          <img src="https://www.vinasa.mx/wp-content/uploads/2021/07/tequila.png" alt="Tequila">
+          <div class="product-info">
+            <h3>Tequila 750ml</h3>
+            <p>$350</p>
+            <div class="stock-info">Disponibles: <span>5</span></div>
+          </div>
+          <button class="btn add-to-cart" data-name="Tequila 750ml" data-price="350">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div id="mezcal" class="product-list hidden">
+        <div class="product" data-id="7" data-stock="4">
+          <img src="https://www.vinasa.mx/wp-content/uploads/2021/07/mezcal.png" alt="Mezcal">
+          <div class="product-info">
+            <h3>Mezcal 750ml</h3>
+            <p>$400</p>
+            <div class="stock-info">Disponibles: <span>4</span></div>
+          </div>
+          <button class="btn add-to-cart" data-name="Mezcal 750ml" data-price="400">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cart">
+      <h2>Carrito de Compras</h2>
+      <ul id="cart-items"></ul>
+      <p><strong>Total:</strong> $<span id="total">0</span></p>
+      <a id="whatsapp-link" class="whatsapp-link" href="#" target="_blank">Comprar por WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- Modal para iniciar sesión -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Iniciar Sesión</h2>
+      <input type="text" id="username" placeholder="Usuario" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+      <button class="btn" id="login-submit">Iniciar Sesión</button>
+      <p id="login-message" style="color: red;"></p>
+    </div>
+  </div>
+
+  <!-- Modal para cambiar contraseña -->
+  <div id="changePasswordModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Cambiar Contraseña</h2>
+      <input type="password" id="security-key" placeholder="Clave de seguridad" required>
+      <input type="password" id="current-password" placeholder="Contraseña Actual" required>
+      <input type="password" id="new-password" placeholder="Nueva Contraseña" required>
+      <button class="btn" id="change-password-btn">Cambiar Contraseña</button>
+      <p id="change-password-message" style="color: red;"></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let cartItems = [];
+      let adminPassword = "admin123"; // Contraseña inicial
+      const SECURITY_KEY = "claveSegura123"; // Clave de seguridad para cambiar contraseña
+
+      // Elementos del DOM
+      const hamburgerMenu = document.getElementById('hamburgerMenu');
+      const menuOptions = document.getElementById('menuOptions');
+      const loginMenuBtn = document.getElementById('loginMenuBtn');
+      const logoutMenuBtn = document.getElementById('logoutMenuBtn');
+      const changePasswordMenuBtn = document.getElementById('changePasswordMenuBtn');
+      const loginModal = document.getElementById('loginModal');
+      const changePasswordModal = document.getElementById('changePasswordModal');
+      const closeBtns = document.querySelectorAll('.close');
+      const loginSubmit = document.getElementById('login-submit');
+      const adminContainer = document.getElementById('admin-container');
+      const addProductBtn = document.getElementById('add-product-btn');
+      const categories = document.querySelectorAll('.category');
+      const whatsappLink = document.getElementById('whatsapp-link');
+      const changePasswordBtn = document.getElementById('change-password-btn');
+
+      // Menú Hamburguesa
+      hamburgerMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+        menuOptions.style.display = menuOptions.style.display === 'block' ? 'none' : 'block';
+      });
+
+      // Cerrar menú al hacer clic fuera
+      document.addEventListener('click', function() {
+        menuOptions.style.display = 'none';
+      });
+
+      // Login desde el menú
+      loginMenuBtn.addEventListener('click', function() {
+        loginModal.style.display = "block";
+        menuOptions.style.display = 'none';
+      });
+
+      // Logout desde el menú
+      logoutMenuBtn.addEventListener('click', function() {
+        adminContainer.classList.add('hidden');
+        logoutMenuBtn.classList.add('hidden');
+        changePasswordMenuBtn.classList.add('hidden');
+        loginMenuBtn.classList.remove('hidden');
+        menuOptions.style.display = 'none';
+        alert('Sesión cerrada correctamente');
+      });
+
+      // Cambiar contraseña desde el menú
+      changePasswordMenuBtn.addEventListener('click', function() {
+        changePasswordModal.style.display = "block";
+        menuOptions.style.display = 'none';
+      });
+
+      // Cerrar modales
+      closeBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const modal = this.closest('.modal');
+          modal.style.display = "none";
+        });
+      });
+
+      // Cerrar modal al hacer clic fuera
+      window.addEventListener('click', function(event) {
+        if (event.target.classList.contains('modal')) {
+          event.target.style.display = "none";
+        }
+      });
+
+      // Login
+      loginSubmit.addEventListener('click', function() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const loginMessage = document.getElementById('login-message');
+
+        if (username === "admin" && password === adminPassword) {
+          loginModal.style.display = "none";
+          adminContainer.classList.remove('hidden');
+          loginMessage.textContent = '';
+          logoutMenuBtn.classList.remove('hidden');
+          changePasswordMenuBtn.classList.remove('hidden');
+          loginMenuBtn.classList.add('hidden');
+          loadProductsForManagement();
+        } else {
+          loginMessage.textContent = 'Usuario o contraseña incorrectos.';
+        }
+      });
+
+      // Cambiar contraseña
+      changePasswordBtn.addEventListener('click', function() {
+        const securityKey = document.getElementById('security-key').value;
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const changePasswordMessage = document.getElementById('change-password-message');
+
+        if (securityKey !== SECURITY_KEY) {
+          changePasswordMessage.textContent = 'Clave de seguridad incorrecta.';
+          changePasswordMessage.style.color = 'red';
+          return;
+        }
+
+        if (currentPassword === adminPassword) {
+          adminPassword = newPassword; // Cambiar la contraseña
+          changePasswordMessage.textContent = 'Contraseña cambiada correctamente.';
+          changePasswordMessage.style.color = 'green';
+          
+          // Limpiar campos después de 2 segundos
+          setTimeout(() => {
+            document.getElementById('security-key').value = '';
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            changePasswordMessage.textContent = '';
+            changePasswordModal.style.display = "none";
+          }, 2000);
+        } else {
+          changePasswordMessage.textContent = 'La contraseña actual es incorrecta.';
+          changePasswordMessage.style.color = 'red';
+        }
+      });
+
+      // Cambiar categorías
+      categories.forEach(category => {
+        category.addEventListener('click', function() {
+          const categoryId = this.getAttribute('data-category');
+          showProducts(categoryId);
+        });
+      });
+
+      // Mostrar productos por categoría
+      function showProducts(category) {
+        document.querySelectorAll('.product-list').forEach(list => {
+          list.classList.add('hidden');
+        });
+        document.getElementById(category).classList.remove('hidden');
+      }
+
+      // Añadir al carrito
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('add-to-cart')) {
+          const productElement = e.target.closest('.product');
+          const name = e.target.getAttribute('data-name');
+          const price = parseFloat(e.target.getAttribute('data-price'));
+          const stock = parseInt(productElement.dataset.stock);
+          
+          if(stock > 0) {
+            addToCart(name, price);
+            productElement.dataset.stock = stock - 1;
+            productElement.querySelector('.stock-info span').textContent = stock - 1;
+          } else {
+            alert('No hay suficientes existencias');
+          }
+        }
+      });
+
+      function addToCart(name, price) {
+        const existingItem = cartItems.find(item => item.name === name);
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cartItems.push({ name, price, quantity: 1 });
+        }
+        updateCart();
+      }
+
+      // Actualizar carrito
+      function updateCart() {
+        const list = document.getElementById('cart-items');
+        const totalSpan = document.getElementById('total');
+
+        list.innerHTML = '';
+        let total = 0;
+
+        cartItems.forEach((item, index) => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            ${item.quantity} x ${item.name} - $${(item.price * item.quantity).toFixed(2)}
+            <button class="btn remove-btn" data-index="${index}">Quitar</button>
+          `;
+          list.appendChild(li);
+          total += item.price * item.quantity;
+        });
+
+        // Agregar eventos a los botones de quitar
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            removeFromCart(index);
+          });
+        });
+
+        totalSpan.textContent = total.toFixed(2);
+        updateWhatsAppLink();
+      }
+
+      // Quitar del carrito
+      function removeFromCart(index) {
+        const removedItem = cartItems[index];
+        cartItems.splice(index, 1);
+        
+        // Restaurar stock
+        const productName = removedItem.name;
+        document.querySelectorAll('.product').forEach(product => {
+          if(product.querySelector('h3').textContent === productName) {
+            const currentStock = parseInt(product.dataset.stock);
+            product.dataset.stock = currentStock + removedItem.quantity;
+            product.querySelector('.stock-info span').textContent = currentStock + removedItem.quantity;
+          }
+        });
+        
+        updateCart();
+      }
+
+      // Actualizar enlace de WhatsApp
+      function updateWhatsAppLink() {
+        const message = cartItems.map(item => 
+          `${item.quantity} x ${item.name} - $${(item.price * item.quantity).toFixed(2)}`
+        ).join('%0A');
+        
+        const total = document.getElementById('total').textContent;
+        whatsappLink.href = `https://wa.me/522382414746?text=Hola,%20quiero%20comprar:%0A${message}%0ATotal:%20$${total}`;
+      }
+
+      // Cargar productos para gestión
+      function loadProductsForManagement() {
+        const managementList = document.getElementById('product-management-list');
+        managementList.innerHTML = '';
+        
+        document.querySelectorAll('.product').forEach(product => {
+          const productId = product.dataset.id;
+          const name = product.querySelector('h3').textContent;
+          const price = product.querySelector('p').textContent.replace('$','');
+          const stock = product.dataset.stock;
+          const category = product.closest('.product-list').id.replace('-',' ');
+          
+          const productDiv = document.createElement('div');
+          productDiv.className = 'product-management-item';
+          productDiv.innerHTML = `
+            <div>
+              <strong>${name}</strong> - ${category}
+              <div>Precio: $<input type="number" value="${price}" id="price-${productId}" class="price-input" min="0" step="0.01"></div>
+              <div>Existencias: <input type="number" value="${stock}" id="stock-${productId}" class="stock-input" min="0"></div>
+            </div>
+            <div class="admin-actions">
+              <button class="btn update-btn" data-id="${productId}">Actualizar</button>
+              <button class="btn remove-btn" data-id="${productId}">Eliminar</button>
+            </div>
+          `;
+          managementList.appendChild(productDiv);
+        });
+
+        // Asignar eventos a los nuevos botones
+        document.querySelectorAll('.update-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const productId = this.dataset.id;
+            const newPrice = parseFloat(document.getElementById(`price-${productId}`).value);
+            const newStock = parseInt(document.getElementById(`stock-${productId}`).value);
+            
+            const product = document.querySelector(`.product[data-id="${productId}"]`);
+            product.querySelector('p').textContent = `$${newPrice.toFixed(2)}`;
+            product.dataset.stock = newStock;
+            product.querySelector('.stock-info span').textContent = newStock;
+            
+            // Actualizar precio en el carrito si existe
+            cartItems.forEach(item => {
+              if (item.name === product.querySelector('h3').textContent) {
+                item.price = newPrice;
+              }
+            });
+            updateCart();
+            
+            alert('Producto actualizado correctamente');
+          });
+        });
+
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            if(confirm('¿Estás seguro de eliminar este producto?')) {
+              const productId = this.dataset.id;
+              const product = document.querySelector(`.product[data-id="${productId}"]`);
+              const productName = product.querySelector('h3').textContent;
+              
+              // Eliminar del carrito si existe
+              cartItems = cartItems.filter(item => item.name !== productName);
+              updateCart();
+              
+              // Eliminar producto
+              product.remove();
+              loadProductsForManagement();
+            }
+          });
+        });
+      }
+
+      // Añadir nuevo producto
+      addProductBtn.addEventListener('click', function() {
+        const name = document.getElementById('product-name').value;
+        const price = parseFloat(document.getElementById('product-price').value);
+        const stock = parseInt(document.getElementById('product-stock').value);
+        const image = document.getElementById('product-image').value;
+        const category = document.getElementById('product-category').value;
+
+        if (name && !isNaN(price) && !isNaN(stock) && image) {
+          const productList = document.getElementById(category);
+          const productId = Math.random().toString(36).substr(2, 9);
+          
+          const productDiv = document.createElement('div');
+          productDiv.className = 'product';
+          productDiv.dataset.id = productId;
+          productDiv.dataset.stock = stock;
+          productDiv.innerHTML = `
+            <img src="${image}" alt="${name}" onerror="this.src='https://via.placeholder.com/100'">
+            <div class="product-info">
+              <h3>${name}</h3>
+              <p>$${price.toFixed(2)}</p>
+              <div class="stock-info">Disponibles: <span>${stock}</span></div>
+            </div>
+            <button class="btn add-to-cart" data-name="${name}" data-price="${price}">Agregar al carrito</button>
+          `;
+          productList.appendChild(productDiv);
+          
+          // Resetear formulario
+          document.getElementById('product-name').value = '';
+          document.getElementById('product-price').value = '';
+          document.getElementById('product-stock').value = '';
+          document.getElementById('product-image').value = '';
+
+          // Actualizar lista de gestión
+          loadProductsForManagement();
+        } else {
+          alert('Por favor complete todos los campos correctamente');
+        }
+      });
+
+      // Mostrar categoría inicial
+      showProducts('vino-tinto');
+    });
+  </script>
+
+<!-- Firebase y funciones de prueba -->
+<script type="module">
+  // Importar SDKs de Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  // Tu configuración de Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDeY_4P3Pigwf7qJFESVA1KSnycTGzeTBs",
+    authDomain: "pomos-y-chelasth.firebaseapp.com",
+    projectId: "pomos-y-chelasth",
+    storageBucket: "pomos-y-chelasth.firebasestorage.app",
+    messagingSenderId: "822374248991",
+    appId: "1:822374248991:web:74eb83a587e82b103fdb2a",
+    measurementId: "G-97J7R02GNT"
+  };
+
+  // Inicializar Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // Función: Guardar un dato de prueba en Firestore
+  document.getElementById("btnGuardarDato").addEventListener("click", async () => {
+    try {
+      const docRef = await addDoc(collection(db, "visitas"), {
+        mensaje: "Hola desde Pomos y Chelas",
+        fecha: new Date()
+      });
+      alert(`Dato guardado con ID: ${docRef.id}`);
+    } catch (e) {
+      console.error("Error añadiendo documento: ", e);
+    }
+  });
+
+  // Función: Iniciar sesión con Google
+  document.getElementById("btnLoginGoogle").addEventListener("click", async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      alert(`Bienvenido ${result.user.displayName}`);
+    } catch (error) {
+      console.error("Error al iniciar sesión: ", error);
+    }
+  });
+
+  // Función: Cerrar sesión
+  document.getElementById("btnLogout").addEventListener("click", async () => {
+    await signOut(auth);
+    alert("Sesión cerrada");
+  });
+</script>
+
+<!-- Botones de prueba -->
+<div style="margin-top: 30px; padding: 20px; background: white; border-radius: 10px;">
+  <h2>Pruebas Firebase</h2>
+  <button id="btnGuardarDato" class="btn">Guardar dato en Firestore</button>
+  <button id="btnLoginGoogle" class="btn">Iniciar sesión con Google</button>
+  <button id="btnLogout" class="btn remove-btn">Cerrar sesión</button>
+</div>
+
+</body>
+</html>
